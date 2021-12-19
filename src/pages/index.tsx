@@ -9,7 +9,7 @@ import PostList from 'components/Main/PostList'
 import { graphql } from 'gatsby'
 import { PostListItemType } from 'components/Main/PostItem.types'
 import { IGatsbyImageData } from 'gatsby-plugin-image'
-
+import Template from 'components/Common/Template'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -64,16 +64,14 @@ const IndexPage: FunctionComponent<IndexProp> = function ({
   )
 
   return (
-    <Container>
-      <GlobalStyle />
+    <Template>
       <Introduction profileImage={gatsbyImageData} />
       <CategoryList
         selectedCategory={selectedCategory}
         categoryList={categoryList}
       />
       <PostList posts={edges} selectedCategory={selectedCategory} />
-      <Footer />
-    </Container>
+    </Template>
   )
 }
 

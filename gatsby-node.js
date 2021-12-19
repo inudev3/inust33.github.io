@@ -35,8 +35,9 @@ exports.onCreateNode = ({node, getNode, actions})=>{
 exports.createPages = async({actions, graphql, reporter})=>{
   const {createPage} = actions;
 
-  const queryAllMarkdownData = await graphql(`
-     {
+  const queryAllMarkdownData = await graphql(
+    `
+      {
         allMarkdownRemark(
           sort: {
             order: DESC
@@ -52,7 +53,8 @@ exports.createPages = async({actions, graphql, reporter})=>{
           }
         }
       }
-  `)
+    `,
+  );
   if(queryAllMarkdownData.errors){
     reporter.panicOnBuild('Error while running query');
     return;
@@ -66,5 +68,6 @@ exports.createPages = async({actions, graphql, reporter})=>{
       context:{slug}
     };
     createPage(pageOptions);
-  }
+  };
+  queryAllMarkdownData.data.allMarkdownRemark.edges.forEach(generatePostPage);
 }
