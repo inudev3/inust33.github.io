@@ -18,7 +18,6 @@ module.exports = {
       options: {
 
         siteUrl: 'https://inust33.github.io',
-
         stripQueryString: true,
       },
     },
