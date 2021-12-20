@@ -1,20 +1,14 @@
 import React, { FunctionComponent, useMemo } from 'react'
 
-import GlobalStyle from 'components/Common/GlobalStyle'
-import styled from '@emotion/styled'
 import Introduction from 'components/Main/introduction'
-import Footer from 'components/Common/Footer'
+
 import CategoryList, { CategoryListProp } from 'components/Main/CategoryList'
 import PostList from 'components/Main/PostList'
 import { graphql } from 'gatsby'
 import { PostListItemType } from 'components/Main/PostItem.types'
 import { IGatsbyImageData } from 'gatsby-plugin-image'
 import Template from 'components/Common/Template'
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`
+
 type IndexProp = {
   location: { search: string }
   data: {
