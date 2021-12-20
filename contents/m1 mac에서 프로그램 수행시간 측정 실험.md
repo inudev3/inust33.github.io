@@ -3,10 +3,9 @@ title: 'm1 mac에서 메모리 캐시의 작동 및 ISA 확인하기 위한 프�
 categories: ['CSAPP', 'System Programming', 'C']
 date: '2021-12-20'
 summary: 'm1 mac에서의 ISA(Instruction Set Architecture) 및 메모리 캐시의 성능 등을 측정해보기 위해 CSAPP 5장 프로그램 최적화 챕터에 나오는 프로그램 수행시간 측정 실험을 해보았다.'
-thumbnail: '../static/profile-image.jpeg'
+thumbnail: './img_2.png'
 ---
-레포트 #5
-32144316 정인우
+이 글은 CSAPP 5장 프로그램 최적화 챕터와 단국대학교 소프트웨어학과 최종무 교수님의 시스템 프로그래밍 수업에 나오는 내용들을 기반으로 작성되었습니다.
 
 본 레포트에서는 캐시라인, 병렬 수행 등 여러가지 요소에 의해 프로그램의 수행시간이 어떻게 변화하는지를 파악하고 이에 대해 중점적으로 조사하고자 합니다.
 

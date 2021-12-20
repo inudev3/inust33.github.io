@@ -16,7 +16,9 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-canonical-urls',
       options: {
+
         siteUrl: 'https://inust33.github.io',
+
         stripQueryString: true,
       },
     },
