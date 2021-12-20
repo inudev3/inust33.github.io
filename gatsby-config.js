@@ -3,7 +3,8 @@ module.exports = {
     title: `개발자 inu의 개발 블로그`,
     description: `개발자로써의 저를 표현한 블로그 입니다.`,
     author: `Inu`,
-    siteUrl: `https://inust33.github.io',
+    siteUrl: `https://inust33.github.io/`,
+
   },
   plugins: [
     'gatsby-plugin-sitemap',
@@ -18,6 +19,7 @@ module.exports = {
       options: {
 
         siteUrl: 'https://inust33.github.io',
+
         stripQueryString: true,
       },
     },
