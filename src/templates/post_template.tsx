@@ -4,10 +4,14 @@ import Template from 'components/Common/Template'
 import PostHead from 'components/Post/PostHead'
 import { PostFrontmatterType } from 'components/Main/PostItem.types'
 import PostContent from 'components/Post/PostContent'
+import CommentWidget from 'components/Post/CommentWidget'
 
 type PostTemplateProp = {
   data: {
     allMarkdownRemark: { edges: PostPageItemType[] }
+  }
+  location: {
+    href: string
   }
 }
 export type PostPageItemType = {
@@ -21,6 +25,7 @@ const PostTemplate: FunctionComponent<PostTemplateProp> = function ({
   data: {
     allMarkdownRemark: { edges },
   },
+  location: { href },
 }) {
   const {
     node: {
@@ -32,13 +37,13 @@ const PostTemplate: FunctionComponent<PostTemplateProp> = function ({
         categories,
         thumbnail: {
           childImageSharp: { gatsbyImageData },
+          publicURL,
         },
       },
     },
   } = edges[0]
-
   return (
-    <Template>
+    <Template title={title} description={summary} url={href} image={publicURL}>
       <PostHead
         title={title}
         date={date}
@@ -46,6 +51,7 @@ const PostTemplate: FunctionComponent<PostTemplateProp> = function ({
         thumbnail={gatsbyImageData}
       />
       <PostContent html={html} />
+      <CommentWidget />
     </Template>
   )
 }

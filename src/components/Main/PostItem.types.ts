@@ -9,8 +9,8 @@ export type PostFrontmatterType = {
     childImageSharp: {
       gatsbyImageData: IGatsbyImageData
     }
+    publicURL: string
   }
-  link: string
 }
 export type PostListItemType = {
   node: {
