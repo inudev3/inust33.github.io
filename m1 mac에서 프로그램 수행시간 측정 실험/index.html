@@ -1,0 +1,288 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/styles.e53586a225ffdde20c86.css" data-identity="gatsby-global-css">code[class*=language-],pre[class*=language-]{word-wrap:normal;background:none;color:#ccc;font-family:Consolas,Monaco,Andale Mono,Ubuntu Mono,monospace;font-size:1em;-webkit-hyphens:none;-ms-hyphens:none;hyphens:none;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;text-align:left;white-space:pre;word-break:normal;word-spacing:normal}pre[class*=language-]{margin:.5em 0;overflow:auto;padding:1em}:not(pre)>code[class*=language-],pre[class*=language-]{background:#2d2d2d}:not(pre)>code[class*=language-]{border-radius:.3em;padding:.1em;white-space:normal}.token.block-comment,.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#999}.token.punctuation{color:#ccc}.token.attr-name,.token.deleted,.token.namespace,.token.tag{color:#e2777a}.token.function-name{color:#6196cc}.token.boolean,.token.function,.token.number{color:#f08d49}.token.class-name,.token.constant,.token.property,.token.symbol{color:#f8c555}.token.atrule,.token.builtin,.token.important,.token.keyword,.token.selector{color:#cc99cd}.token.attr-value,.token.char,.token.regex,.token.string,.token.variable{color:#7ec699}.token.entity,.token.operator,.token.url{color:#67cdcc}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}.token.inserted{color:green}</style><meta name="generator" content="Gatsby 4.4.0"/><link rel="sitemap" type="application/xml" href="/sitemap/sitemap-index.xml"/><link rel="canonical" href="https://inust33.github.io/m1%20mac에서%20프로그램%20수행시간%20측정%20실험/" data-baseprotocol="https:" data-basehost="inust33.github.io"/><title data-react-helmet="true">m1 mac에서 메모리 캐시의 작동 및 ISA 확인하기 위한 프로그램 시간측정 실험</title><meta data-react-helmet="true" name="description" content="m1 mac에서의 ISA(Instruction Set Architecture) 및 메모리 캐시의 성능 등을 측정해보기 위해 CSAPP 5장 프로그램 최적화 챕터에 나오는 프로그램 수행시간 측정 실험을 해보았다."/><meta data-react-helmet="true" name="viewport" content="width=device-width, initial-scale=1.0"/><meta data-react-helmet="true" http-equiv="Content-Type" content="text/html;charset=UTF-8"/><meta data-react-helmet="true" property="og:type" content="website"/><meta data-react-helmet="true" property="og:title" content="m1 mac에서 메모리 캐시의 작동 및 ISA 확인하기 위한 프로그램 시간측정 실험"/><meta data-react-helmet="true" property="og:description" content="m1 mac에서의 ISA(Instruction Set Architecture) 및 메모리 캐시의 성능 등을 측정해보기 위해 CSAPP 5장 프로그램 최적화 챕터에 나오는 프로그램 수행시간 측정 실험을 해보았다."/><meta data-react-helmet="true" property="og:image"/><meta data-react-helmet="true" property="og:url"/><meta data-react-helmet="true" property="og:site_name" content="m1 mac에서 메모리 캐시의 작동 및 ISA 확인하기 위한 프로그램 시간측정 실험"/><meta data-react-helmet="true" name="twitter:card" content="summary"/><meta data-react-helmet="true" name="twitter:title" content="m1 mac에서 메모리 캐시의 작동 및 ISA 확인하기 위한 프로그램 시간측정 실험"/><meta data-react-helmet="true" name="twitter:description" content="m1 mac에서의 ISA(Instruction Set Architecture) 및 메모리 캐시의 성능 등을 측정해보기 위해 CSAPP 5장 프로그램 최적화 챕터에 나오는 프로그램 수행시간 측정 실험을 해보았다."/><meta data-react-helmet="true" name="twitter:image"/><meta data-react-helmet="true" name="twitter:site" content="@사용자이름"/><meta data-react-helmet="true" name="twitter:creator" content="@사용자이름"/><style>.gatsby-image-wrapper{position:relative;overflow:hidden}.gatsby-image-wrapper picture.object-fit-polyfill{position:static!important}.gatsby-image-wrapper img{bottom:0;height:100%;left:0;margin:0;max-width:none;padding:0;position:absolute;right:0;top:0;width:100%;object-fit:cover}.gatsby-image-wrapper [data-main-image]{opacity:0;transform:translateZ(0);transition:opacity .25s linear;will-change:opacity}.gatsby-image-wrapper-constrained{display:inline-block;vertical-align:top}</style><noscript><style>.gatsby-image-wrapper noscript [data-main-image]{opacity:1!important}.gatsby-image-wrapper [data-placeholder-image]{opacity:0!important}</style></noscript><script type="module">const e="undefined"!=typeof HTMLImageElement&&"loading"in HTMLImageElement.prototype;e&&document.body.addEventListener("load",(function(e){if(void 0===e.target.dataset.mainImage)return;if(void 0===e.target.dataset.gatsbyImageSsr)return;const t=e.target;let a=null,n=t;for(;null===a&&n;)void 0!==n.parentNode.dataset.gatsbyImageWrapper&&(a=n.parentNode),n=n.parentNode;const o=a.querySelector("[data-placeholder-image]"),r=new Image;r.src=t.currentSrc,r.decode().catch((()=>{})).then((()=>{t.style.opacity=1,o&&(o.style.opacity=0,o.style.transition="opacity 500ms linear")}))}),!0);</script><link as="script" rel="preload" href="/webpack-runtime-7f689120d7874556cb17.js"/><link as="script" rel="preload" href="/framework-a71258511df4b73cc72c.js"/><link as="script" rel="preload" href="/app-9ae18457cda424c84e6b.js"/><link as="script" rel="preload" href="/cb1608f2-3d1f96b69f7c4498694b.js"/><link as="script" rel="preload" href="/d0dcf9c1039535d44ee74defc829dfbf62dac3c5-7039da108a9f6100171e.js"/><link as="script" rel="preload" href="/component---src-templates-post-template-tsx-4e8a3edb581fd52dc7f8.js"/><link as="fetch" rel="preload" href="/page-data/m1 mac에서 프로그램 수행시간 측정 실험/page-data.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/app-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><style data-emotion="css 13ku56z">.css-13ku56z{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;height:100%;}</style><main class="css-13ku56z e1strnqo0"><style data-emotion="css-global jd0wat">@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap');*{padding:0;margin:0;box-sizing:border-box;font-family:'Nanum-Myeongjo',serif;}html,body,#___gatsby{height:100%;}a,a:hover{color:inherit;-webkit-text-decoration:none;text-decoration:none;cursor:pointer;}</style><style data-emotion="css 16cz9yp">.css-16cz9yp{position:relative;width:100%;height:400px;}@media (max-width: 768px){.css-16cz9yp{height:300px;}}</style><div class="css-16cz9yp e1opi4mu1"><style data-emotion="css 1bjn9yo">.css-1bjn9yo{z-index:-1;width:100%;height:400px;object-fit:cover;-webkit-filter:brightness(0.25);filter:brightness(0.25);}@media (max-width: 768px){.css-1bjn9yo{height:300px;}}</style><div data-gatsby-image-wrapper="" style="position:absolute" class="gatsby-image-wrapper gatsby-image-wrapper-constrained css-1bjn9yo e1opi4mu0"><div style="max-width:483px;display:block"><img alt="" role="presentation" aria-hidden="true" src="data:image/svg+xml;charset=utf-8,%3Csvg height=&#x27;291&#x27; width=&#x27;483&#x27; xmlns=&#x27;http://www.w3.org/2000/svg&#x27; version=&#x27;1.1&#x27;%3E%3C/svg%3E" style="max-width:100%;display:block;position:static"/></div><img aria-hidden="true" data-placeholder-image="" style="opacity:1;transition:opacity 500ms linear" decoding="async" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsTAAALEwEAmpwYAAABgUlEQVQoz4VTDUvDMBTs//9hom4griIoTF1tZU3SNevynWYnLzo3tbqDR0JILnfvo1BKIYQA7z2c9wghopcSVVWhqlao6xrV6ysYa/P++eUFTVNDSokYY353GgWREfb7PQ6QssfV5QVms2uUZYn5zQ3m8xkeHh9xuyhRlgvwrsMUMqG1BmvG4UJCNzgYnxA/+aM2SGw9+ZhE/IyCZMfg8VQ1aKVFt3PgW4taKFRCo244lrf3SESQEtJnHBydOssKSR3nHEII/AWXkD+YUvXL8jAMuLsrIUSHlH5boDNC21use5P3acLqgbwYhi2WT0swxqcvnVxue4Ne+X/zWIRcboeWMZwDKVsxBSYtlI0Y00/L+48qEynj/Cvhp4k/Wj8WYtABb51GLTQaKpxQWPcWxF9QMxKM1rkxjTGw1ubQWuegPNNKQ5D3age126LbbMC7Hq3Y4K3lMMYeCdOYvimhdRzHHNRaROjJTZ4qB2MtnLMYY8wOrTEfk3IgPAe6R5+cwzvfP6an6Ehr5wAAAABJRU5ErkJggg==" alt=""/><picture><source type="image/webp" data-srcset="/static/aae4c9d31802d36a864cf3e51fded08e/0e0e7/img_2.webp 121w,/static/aae4c9d31802d36a864cf3e51fded08e/fd13c/img_2.webp 242w,/static/aae4c9d31802d36a864cf3e51fded08e/5acc8/img_2.webp 483w" sizes="(min-width: 483px) 483px, 100vw"/><img data-gatsby-image-ssr="" data-main-image="" style="opacity:0" sizes="(min-width: 483px) 483px, 100vw" decoding="async" loading="lazy" data-src="/static/aae4c9d31802d36a864cf3e51fded08e/95b71/img_2.png" data-srcset="/static/aae4c9d31802d36a864cf3e51fded08e/e4a37/img_2.png 121w,/static/aae4c9d31802d36a864cf3e51fded08e/f85f3/img_2.png 242w,/static/aae4c9d31802d36a864cf3e51fded08e/95b71/img_2.png 483w" alt="thumbnail"/></picture><noscript><picture><source type="image/webp" srcSet="/static/aae4c9d31802d36a864cf3e51fded08e/0e0e7/img_2.webp 121w,/static/aae4c9d31802d36a864cf3e51fded08e/fd13c/img_2.webp 242w,/static/aae4c9d31802d36a864cf3e51fded08e/5acc8/img_2.webp 483w" sizes="(min-width: 483px) 483px, 100vw"/><img data-gatsby-image-ssr="" data-main-image="" style="opacity:0" sizes="(min-width: 483px) 483px, 100vw" decoding="async" loading="lazy" src="/static/aae4c9d31802d36a864cf3e51fded08e/95b71/img_2.png" srcSet="/static/aae4c9d31802d36a864cf3e51fded08e/e4a37/img_2.png 121w,/static/aae4c9d31802d36a864cf3e51fded08e/f85f3/img_2.png 242w,/static/aae4c9d31802d36a864cf3e51fded08e/95b71/img_2.png 483w" alt="thumbnail"/></picture></noscript><script type="module">const t="undefined"!=typeof HTMLImageElement&&"loading"in HTMLImageElement.prototype;if(t){const t=document.querySelectorAll("img[data-main-image]");for(let e of t){e.dataset.src&&(e.setAttribute("src",e.dataset.src),e.removeAttribute("data-src")),e.dataset.srcset&&(e.setAttribute("srcset",e.dataset.srcset),e.removeAttribute("data-srcset"));const t=e.parentNode.querySelectorAll("source[data-srcset]");for(let e of t)e.setAttribute("srcset",e.dataset.srcset),e.removeAttribute("data-srcset");e.complete&&(e.style.opacity=1)}}</script></div><style data-emotion="css m1156n">.css-m1156n{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;width:768px;height:100%;margin:0 auto;padding:60px 0;color:#ffffff;}@media (max-width: 768px){.css-m1156n{width:100%;padding:40px 20px;}}</style><div class="css-m1156n e1st1jau3"><style data-emotion="css gywgo7">.css-gywgo7{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:#ffffff;color:#000000;font-size:22px;cursor:pointer;box-shadow:0 0 10px rgba(0, 0, 0, 0.3);}@media (max-width: 768px){.css-gywgo7{width:30px;height:30px;font-size:18px;}}</style><div class="css-gywgo7 e1st1jau2"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-left" class="svg-inline--fa fa-arrow-left fa-w-14 " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M257.5 445.1l-22.2 22.2c-9.4 9.4-24.6 9.4-33.9 0L7 273c-9.4-9.4-9.4-24.6 0-33.9L201.4 44.7c9.4-9.4 24.6-9.4 33.9 0l22.2 22.2c9.5 9.5 9.3 25-.4 34.3L136.6 216H424c13.3 0 24 10.7 24 24v32c0 13.3-10.7 24-24 24H136.6l120.5 114.8c9.8 9.3 10 24.8.4 34.3z"></path></svg></div><style data-emotion="css gn4qtp">.css-gn4qtp{display:-webkit-box;overflow:hidden;overflow-wrap:break-word;margin-top:auto;text-overflow:ellipsis;white-space:normal;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:45px;font-weight:800;}@media (max-width: 768px){.css-gn4qtp{font-size:30px;}}</style><div class="css-gn4qtp e1st1jau1">m1 mac에서 메모리 캐시의 작동 및 ISA 확인하기 위한 프로그램 시간측정 실험</div><style data-emotion="css 1ranb43">.css-1ranb43{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-webkit-justify-content:space-between;justify-content:space-between;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;margin-top:10px;font-size:18px;font-weight:700;}@media (max-width: 768px){.css-1ranb43{-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-align-items:flex-start;-webkit-box-align:flex-start;-ms-flex-align:flex-start;align-items:flex-start;font-size:15px;font-weight:300;}}</style><div class="css-1ranb43 e1st1jau0"><div>CSAPP / System Programming / C</div><div>2021.12.20.</div></div></div></div><style data-emotion="css 1gkce9e">.css-1gkce9e{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;width:768px;margin:0 auto;padding:100px 0;word-break:break-all;line-height:1.8;font-size:16px;font-weight:400;}.css-1gkce9e p{padding:3px 0;}.css-1gkce9e h1,.css-1gkce9e h2,.css-1gkce9e h3{font-weight:800;margin-bottom:30px;}.css-1gkce9e *+h1,.css-1gkce9e *+h2,.css-1gkce9e *+h3{margin-top:80px;}.css-1gkce9e hr+h1,.css-1gkce9e hr+h2,.css-1gkce9e hr+h3{margin-top:0;}.css-1gkce9e h1{font-size:30px;}.css-1gkce9e h2{font-size:25px;}.css-1gkce9e h3{font-size:20px;}.css-1gkce9e blockquote{margin:30px 0;padding:5px 15px;border-left:2px solid #000000;font-weight:800;}.css-1gkce9e ol,.css-1gkce9e ul{margin-left:20px;padding:30px 0;}.css-1gkce9e hr{border:1px solid #000000;margin:100px 0;}.css-1gkce9e a{color:#4263eb;-webkit-text-decoration:underline;text-decoration:underline;}.css-1gkce9e pre[class*='language-']{margin:30px 0;padding:15px;font-size:15px;}.css-1gkce9e pre[class*='language-']::-webkit-scrollbar-thumb{background:rgba(255, 255, 255, 0.5);border-radius:3px;}.css-1gkce9e code[class*='language-'],.css-1gkce9e pre[class*='language-']{tab-size:2;}@media(max-width:768px){.css-1gkce9e{width:100%;line-height:1.6;font-size:14px;}.css-1gkce9e h1{font-size:23px;}.css-1gkce9e h2{font-size:20px;}.css-1gkce9e h3{font-size:17px;}.css-1gkce9e img{width:100%;}.css-1gkce9e hr{margin:50px 0;}}</style><div class="css-1gkce9e e1ijh0y10"><p>이 글은 CSAPP 5장 프로그램 최적화 챕터와 단국대학교 소프트웨어학과 최종무 교수님의 시스템 프로그래밍 수업에 나오는 내용들을 기반으로 작성되었습니다.</p>
+<p>본 레포트에서는 캐시라인, 병렬 수행 등 여러가지 요소에 의해 프로그램의 수행시간이 어떻게 변화하는지를 파악하고 이에 대해 중점적으로 조사하고자 합니다.</p>
+<p>우선, 함수 포인터를 선언하고 command line argument로 숫자를 입력받아 이에 따라 서로 다른 프로그램이 실행되게 하였습니다. 헤더파일에는 시간측정 함수 gettimeofday를 통해 나온 시간 차이를 출력해주기 위한 TimeGap이라는 함수를 선언하고 이를 사용하였습니다. 측정을 위해 사용한 프로그램으로는</p>
+<ol>
+<li>명령어의 의존도에 따라 병렬수행으로 프로그램 수행시간이 얼마나 최적화되는지를 측정한 void parelle()</li>
+<li>Int 배열을 탐색하는 루프를 돌며, 캐시라인의 크기를 확인하고 cpu 캐시 / 캐시라인이 프로그램 성능에 미치는 영향을 측정한 void cacheline()</li>
+<li>Cacheline()에서 루프의 반복횟수가 수행시간에 주는 영향을 고립시켜 캐시의 fetch 시간의 영향을 더 큰 비중을 두어 측정한 void cacheline2()</li>
+<li>멀티 쓰레드 환경에서 복수의 태스크가 동일한 캐시라인에 쓰기 연산을 행할 시 일어나는 메모리 거짓공유현상과 이에 따른 성능저하를 측정한 void falsesharing()
+이 있습니다.</li>
+</ol>
+<p>우선 parallel부터 알아보겠습니다.</p>
+<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">void parellel(){
+int a[2]={0,0};
+int b[2]={0,0};
+Time stime, etime;
+gettimeofday(&amp;stime, NULL);
+for(int i=0;i&lt;1024*1024*256;i++)
+{
+a[0]++;
+a[0]++;
+}
+gettimeofday(&amp;etime, NULL);
+printgap(stime, etime);
+gettimeofday(&amp;stime, NULL);
+for(int i=0;i&lt;1024*1024*256;i++)
+{
+b[0]++;
+b[1]++;
+}
+gettimeofday(&amp;etime, NULL);
+printgap(stime, etime);
+
+}</code></pre></div>
+<p>parellel에서는 2개의 배열을 선언하고, 2개의 루프문에서, 1개는 배열 1개의 동일한 인덱스에 대해 2번의 덧셈 연산을, 나머지는 서로 다른 배열 인덱스 대해 병렬적으로 덧셈 연산을 수행하였습니다. 언뜻 생각하기에는 두 루프의 수행시간에 차이가 없어야할 것만 같지만, 실제로는 어떨까요?</p>
+<p><span
+      class="gatsby-resp-image-wrapper"
+      style="position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 452px; "
+    >
+      <a
+    class="gatsby-resp-image-link"
+    href="/static/63b3e42c2b44e12aee55f83e34dc019e/80d88/img_1.png"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+    <span
+    class="gatsby-resp-image-background-image"
+    style="padding-bottom: 17.1875%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAADCAYAAACTWi8uAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAnElEQVQI12WMyQ6CMBiEuRsWD4ZCBVq6lwJWjfH9X2wMf4wXD5NZ8mWKSQbE9IALNxi3kfuYSWHJ0HaF9Tv1Lb8Rljtxs45ffodUEdomdHxGcZ08ZrNjNhtGEaFdho1P2oRawUcHoRLlkF6QeiXuVF5Q1gxl3f5UNQwF4wqjjOgHi+N8EIH6cXRsrFfk/dVgmDzljmtUTYv63P3pA48rU2AtOTK/AAAAAElFTkSuQmCC'); background-size: cover; display: block;"
+  ></span>
+  <picture>
+          <source
+              srcset="/static/63b3e42c2b44e12aee55f83e34dc019e/a59e9/img_1.webp 192w,
+/static/63b3e42c2b44e12aee55f83e34dc019e/0ca9f/img_1.webp 384w,
+/static/63b3e42c2b44e12aee55f83e34dc019e/a0edd/img_1.webp 452w"
+              sizes="(max-width: 452px) 100vw, 452px"
+              type="image/webp"
+            />
+          <source
+            srcset="/static/63b3e42c2b44e12aee55f83e34dc019e/3b721/img_1.png 192w,
+/static/63b3e42c2b44e12aee55f83e34dc019e/66595/img_1.png 384w,
+/static/63b3e42c2b44e12aee55f83e34dc019e/80d88/img_1.png 452w"
+            sizes="(max-width: 452px) 100vw, 452px"
+            type="image/png"
+          />
+          <img
+            class="gatsby-resp-image-image"
+            src="/static/63b3e42c2b44e12aee55f83e34dc019e/80d88/img_1.png"
+            alt="img_1.png"
+            title="img_1.png"
+            loading="lazy"
+            decoding="async"
+            style="width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;"
+          />
+        </picture>
+  </a>
+    </span></p>
+<p>결과는 다음과 같습니다. 첫번째 루프의 수행시간이 두번째 루프보다 2배 이상으로 큰 것을 볼 수 있습니다. 그 이유는 왜일까요? 바로 첫번째 루프의 2번의 덧셈연산 간에 서로 의존성이 있기 때문입니다, 첫번째 루프에서는 하나의 루프에서 동일한 인덱스를 2번 증가시키고 있고, 이에 따라 뒤에 오는 덧셈연산을 수행하기 위해서는 앞에서의 덧셈연산의 결과가 수행되어야 합니다.
+제가 사용하고 있는 시스템 환경은 애플 실리콘 M1 환경으로, ARM CPU를 사용합니다. 정확히 인텔 CPU와 동일하지는 않지만, 기본적으로 functional unit들은 서로 병렬적으로 수행될 수 있으며, 이를 superscalar라고 부릅니다. 2번째 루프에서는, 배열의 서로 다른 인덱스에 대해서 독립적으로 연산을 수행할 수 있기 때문에, 2번의 연산이 2개의 ALU에서 독립적으로(병렬로) 수행됩니다 하지만 첫번째 루프에서는 데이터 의존성이 있습니다. A[0]에 해당하는 인덱스의 값을 한번 증가시키고, 그 후 다시 값을 한번 더 증가시키려면, 첫번째 덧셈 연산의 결과가 수행되어(exe) 쓰여진 상태여야 합니다(res). 따라서 첫번째 루프는 functional unit을 병렬적으로 사용할 수 없으며, 이에 따라 2번째 루프와 2배가 넘는 시간차이가 나게 됩니다.</p>
+<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">다음은 void cacheline()입니다.</code></pre></div>
+<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">
+void cacheline() {
+
+int* arr = (int*)malloc(sizeof(int) * (1024*1024*64));
+//아래 두줄은 시간측정용 변수
+Time stime , etime;
+//k*2 씩하며 증가
+for (int k = 1; k &lt;= 1024; k *= 2) {
+printf("%d", k);
+gettimeofday(&amp;stime, NULL);
+for (int i = 0; i &lt; 1024*1024*64; i += k) {
+arr[i] *= 3; //인덱싱
+}
+gettimeofday(&amp;etime, NULL);
+
+        printgap(stime,etime);
+
+    }
+}</code></pre></div>
+<p>이 함수 에서는,  int 타입의 일차원 배열을 동적으로 선언한 뒤, 루프를 도는 주기 k를 2배씩 증가시키면서 inner loop에서 곱셈 연산을 수행하고 이 시간을 각각 측정하고 있습니다. 시작 전에 결과를 예측해 보자면, 루프를 도는 간격이 가장 긴 경우부터(k=1) 가장 짧은 경우까지(k=1024) 프로그램 수행시간이 배수로 일정하게 감소하는 법칙을 보일 것 같습니다. 실제로 그런지 확인해보기 전에, 우선 일반적인 인텔 CPU에서의 수행결과를 알아보겠습니다.
+일반적으로 인텔 CPU에서는, CPU가 메모리에서 직접 데이터를 1바이트씩 꺼내는 것이 아니라, 캐시라인(캐시의 크기)인 64바이트 만큼 메모리에서 데이터를 적재한 뒤 캐쉬에서 필요한 데이터를 가져오게 됩니다. 따라서 인텔 CPU에서는, 캐시에 데이터를 fetch하는 속도가 CPU의 연산 수행시간에 비해 상대적으로 더 크기 때문에, 데이터의 크기가 캐시라인의 크기 이상으로 증가하는 k=16 구간에서 다음과 같은 양상을 띠게 될 것이라고 예측됩니다.</p>
+<p><span
+      class="gatsby-resp-image-wrapper"
+      style="position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 483px; "
+    >
+      <a
+    class="gatsby-resp-image-link"
+    href="/static/aae4c9d31802d36a864cf3e51fded08e/a3f7c/img_2.png"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+    <span
+    class="gatsby-resp-image-background-image"
+    style="padding-bottom: 60.416666666666664%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsTAAALEwEAmpwYAAABgUlEQVQoz4VTDUvDMBTs//9hom4griIoTF1tZU3SNevynWYnLzo3tbqDR0JILnfvo1BKIYQA7z2c9wghopcSVVWhqlao6xrV6ysYa/P++eUFTVNDSokYY353GgWREfb7PQ6QssfV5QVms2uUZYn5zQ3m8xkeHh9xuyhRlgvwrsMUMqG1BmvG4UJCNzgYnxA/+aM2SGw9+ZhE/IyCZMfg8VQ1aKVFt3PgW4taKFRCo244lrf3SESQEtJnHBydOssKSR3nHEII/AWXkD+YUvXL8jAMuLsrIUSHlH5boDNC21use5P3acLqgbwYhi2WT0swxqcvnVxue4Ne+X/zWIRcboeWMZwDKVsxBSYtlI0Y00/L+48qEynj/Cvhp4k/Wj8WYtABb51GLTQaKpxQWPcWxF9QMxKM1rkxjTGw1ubQWuegPNNKQ5D3age126LbbMC7Hq3Y4K3lMMYeCdOYvimhdRzHHNRaROjJTZ4qB2MtnLMYY8wOrTEfk3IgPAe6R5+cwzvfP6an6Ehr5wAAAABJRU5ErkJggg=='); background-size: cover; display: block;"
+  ></span>
+  <picture>
+          <source
+              srcset="/static/aae4c9d31802d36a864cf3e51fded08e/a59e9/img_2.webp 192w,
+/static/aae4c9d31802d36a864cf3e51fded08e/0ca9f/img_2.webp 384w,
+/static/aae4c9d31802d36a864cf3e51fded08e/b685b/img_2.webp 483w"
+              sizes="(max-width: 483px) 100vw, 483px"
+              type="image/webp"
+            />
+          <source
+            srcset="/static/aae4c9d31802d36a864cf3e51fded08e/3b721/img_2.png 192w,
+/static/aae4c9d31802d36a864cf3e51fded08e/66595/img_2.png 384w,
+/static/aae4c9d31802d36a864cf3e51fded08e/a3f7c/img_2.png 483w"
+            sizes="(max-width: 483px) 100vw, 483px"
+            type="image/png"
+          />
+          <img
+            class="gatsby-resp-image-image"
+            src="/static/aae4c9d31802d36a864cf3e51fded08e/a3f7c/img_2.png"
+            alt="img_2.png"
+            title="img_2.png"
+            loading="lazy"
+            decoding="async"
+            style="width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;"
+          />
+        </picture>
+  </a>
+    </span></p>
+<p>출처: <a href="http://igoro.com/archive/gallery-of-processor-cache-effects/" target="_blank" rel="nofollow">http://igoro.com/archive/gallery-of-processor-cache-effects/</a></p>
+<p>즉, 이는 전체 프로그램의 수행시간에서 캐시에 데이터를 fetch하는 속도가 cpu의 연산 수행시간에 비해 상대적으로 더 클 경우에 예측되는 추이입니다. 루프의 사이즈가 cacheline보다 커지게 되는 k=16지점 부터 캐시에 데이터를 fetch하는 횟수가 줄어들게 되고, 이에 따라 루프의 사이즈에 반비례하여 수행속도가 감소하는 것입니다 그러면 제 시스템에서의 결과는 어떨까요?</p>
+<p><span
+      class="gatsby-resp-image-wrapper"
+      style="position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 452px; "
+    >
+      <a
+    class="gatsby-resp-image-link"
+    href="/static/34895d207b8f99e561844efea511a0ba/80d88/img_3.png"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+    <span
+    class="gatsby-resp-image-background-image"
+    style="padding-bottom: 57.8125%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsTAAALEwEAmpwYAAABXklEQVQoz42S63KCMBCFeQHrpR0Vyv0WkhBQRH3/Jzuds4jtOO2UHzvZBPLt2bPxutMNph3g+itaN6LtRsldN8K6EfzO8/58l1zpHtZdJOc/xg6yz0uDt80R3v6YQZkRRX1CWrQIk0biM1Yo1Ql51SPJWxyCHKv1HuutLxcZm13wzOdzjz8qe52AeYsoaRCnRqAsxCJF3WP7ET4vzvFzP+fe3s/QtDdUzYCsdIhTjTgziFKNUp2RV52su1+AryEKj0EB7e6o9UXaIyzJrazTWSfFlgBFIb1q7BWVHuTyDGTLVEbYUoUC9MNKlBTqeyiEshAV04as7LB9/1wGJIDA8gGkd/RxVki1jNX68C9MgJzgBDyLmgloECVapssijCXqBMi2anN5vDeLMFYCZctp4ZBkVvavb/BPIFXxDXIwhM6KZNKplmIELvaQSugPwVQUPfwLogp+WEpOlVyX+PgFGq9CJzjEgg0AAAAASUVORK5CYII='); background-size: cover; display: block;"
+  ></span>
+  <picture>
+          <source
+              srcset="/static/34895d207b8f99e561844efea511a0ba/a59e9/img_3.webp 192w,
+/static/34895d207b8f99e561844efea511a0ba/0ca9f/img_3.webp 384w,
+/static/34895d207b8f99e561844efea511a0ba/a0edd/img_3.webp 452w"
+              sizes="(max-width: 452px) 100vw, 452px"
+              type="image/webp"
+            />
+          <source
+            srcset="/static/34895d207b8f99e561844efea511a0ba/3b721/img_3.png 192w,
+/static/34895d207b8f99e561844efea511a0ba/66595/img_3.png 384w,
+/static/34895d207b8f99e561844efea511a0ba/80d88/img_3.png 452w"
+            sizes="(max-width: 452px) 100vw, 452px"
+            type="image/png"
+          />
+          <img
+            class="gatsby-resp-image-image"
+            src="/static/34895d207b8f99e561844efea511a0ba/80d88/img_3.png"
+            alt="img_3.png"
+            title="img_3.png"
+            loading="lazy"
+            decoding="async"
+            style="width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;"
+          />
+        </picture>
+  </a>
+    </span></p>
+<p>실제 수행 결과입니다. 시작 부분에는 루프를 도는 주기 k를 출력하도록 하였습니다. 우선 k가 1부터 16까지인 경우, 실제로 수행시간이 2배씩 줄어드는 것처럼 보입니다. 하지만 중간 지점에서 주기 k가 16에서 32로 증가하는 구간에서는, 오히려 수행시간이 증가하는 현상이 보입니다.
+우선, 애플 실리콘 m1에서 캐시라인의 크기는 인텔 cpu의 2배인 128바이트 입니다. 즉, int 배열의 경우 k=32지점에서부터 캐시의 데이터 fetch횟수가 줄어들고 이에 따라 반비례하는 그래프가 나타나야 하지만, 실제로는 전구간에 걸쳐 균일하게 반비례하는 모습을 보입니다.
+정확한 이유는 알 수 없지만, 애플 실리콘에서는 캐시라인의 크기와 상관없이 캐시에 데이터를 fetch하는 횟수가 동일하거나, 혹은 캐시가 데이터를 fetch하는 속도 자체가 cpu의 연산 수행 속도보다 크지 않을 수 있습니다. 따라서 전체 루프문의 수행시간 또한 캐시의 데이터 fetch 횟수가 아닌, cpu의 연산 횟수가 결정하는 것이죠. 이 부분에 대해서는 m1 칩이 시장에 나온지 얼마 되지 않아 마땅한 자료가 없어 확인하지 못하였지만, SoC인 m1 칩의 특성상 이러한 설명이 합당하지 않을까라고 추측해 보는 바입니다.
+그렇다면 반복문의 반복 횟수를 서로 동일하게 한 뒤에 건너뛰는 인덱스의 크기를 점점 증가시켜서, 최대한 캐쉬의 데이터 fetch가 수행시간에 미치는 영향을 독립적으로 구해보면 어떨까요?
+코드는 다음과 같습니다.</p>
+<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">for (int k = 1; k &lt;= 1024; k *= 2) {
+int *ptr = (int*)malloc(sizeof(int)* (k*1024*64));
+
+    printf("%d\t", k);
+    gettimeofday(&amp;stime, NULL);
+    for (int i = 0; i &lt; k*1024*64; i += k) {
+        ptr[i] *= 3; //인덱싱
+    }
+    gettimeofday(&amp;etime, NULL);
+
+printgap(stime, etime);
+
+}</code></pre></div>
+<p>앞선 코드와 다른 점은, 루프 외부에서 동적할당 했던 배열은, 이번에는 인덱스를 건너뛰는 크기 k에 비례하여 커지게 만들어, 반복문의 횟수를 전부 동일하게 했다는 것 뿐입니다.
+결과는 어떨까요?</p>
+<p><span
+      class="gatsby-resp-image-wrapper"
+      style="position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 452px; "
+    >
+      <a
+    class="gatsby-resp-image-link"
+    href="/static/a55ee4549cbd287e9de663061f1b653f/80d88/img_4.png"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+    <span
+    class="gatsby-resp-image-background-image"
+    style="padding-bottom: 60.9375%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsTAAALEwEAmpwYAAABjUlEQVQoz42TW3OCMBCFeW213hEQgRCuIRCo1lb//w87nV1FZUqnfdjZBMi3Z08Wq1AdlD7AdGfOtTmhqo+DoGdl1aFUHfLSQKYaWdFA6XfOFIVq4XgC1soOsQtyVM0ZgaggkgbePoMfltgFBSJZI04N5ssdXiZrvE5tTN5svE431+D1df82d2A5nkQgFLQ5QyQ1krxFEJUI4wqR1JBZy8822xDzpYfFasf55/qara0XYx+V0OYCIWsG0D4Uigv1wLUdYLZw7oDZwn2sKS9czpYf5Aiih8IeSDBSSe3KEeCPuBWw6BBFRUA5BFLL5CkpXG32A1W/AvvDegRIhSQpzFrYTsym/wmM04aVVM0X36jMzB1IVqRFx8AoTv8HzNWRvVP1581DM1BI76nlSCSY3YCjrffAJO8YpNvLtcXMgC/qdstZeWAfHS/hWRu75QGw1CcebGq9qD5YTe8jwQla6BPbQoVo9u4wys9BQPor6KPl2ocfFti6Aq6f8pjQ0K/tEJ6fgubV9RPMn4Ej8Q13QUDrBgEMogAAAABJRU5ErkJggg=='); background-size: cover; display: block;"
+  ></span>
+  <picture>
+          <source
+              srcset="/static/a55ee4549cbd287e9de663061f1b653f/a59e9/img_4.webp 192w,
+/static/a55ee4549cbd287e9de663061f1b653f/0ca9f/img_4.webp 384w,
+/static/a55ee4549cbd287e9de663061f1b653f/a0edd/img_4.webp 452w"
+              sizes="(max-width: 452px) 100vw, 452px"
+              type="image/webp"
+            />
+          <source
+            srcset="/static/a55ee4549cbd287e9de663061f1b653f/3b721/img_4.png 192w,
+/static/a55ee4549cbd287e9de663061f1b653f/66595/img_4.png 384w,
+/static/a55ee4549cbd287e9de663061f1b653f/80d88/img_4.png 452w"
+            sizes="(max-width: 452px) 100vw, 452px"
+            type="image/png"
+          />
+          <img
+            class="gatsby-resp-image-image"
+            src="/static/a55ee4549cbd287e9de663061f1b653f/80d88/img_4.png"
+            alt="img_4.png"
+            title="img_4.png"
+            loading="lazy"
+            decoding="async"
+            style="width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;"
+          />
+        </picture>
+  </a>
+    </span></p>
+<p>완벽하게 인텔 cpu 처럼 캐시라인 크기 보다 작을 경우 수행시간이 비슷하지는 않지만, 어느정도 캐시라인 임계점인 k=32 이전에서 증가폭이 더뎌진 것을 볼 수 있습니다. 즉 데이터를 fetch하는 횟수가 같아지면서, 실제 수행시간의 증가폭도 감소한다는 것을 볼 수 있는 것이죠. 마찬가지로 캐시라인 크기 임계점인 k=32를 넘어가면, 증가폭이 2배 이상으로 뛰는 것도 볼 수 있습니다. 데이터 fetch 횟수가 줄어들기 때문입니다. 즉, 완벽히 인텔 cpu처럼 프로그램의 수행시간의 결정요소가 데이터 fetch 횟수에 반비례하는 양상을 보이진 않더라도, 여전히 캐시의 데이터 횟수가 프로그램 수행시간에 있어서 다른 요소보다 더 큰 영향을 끼친다는 것을 알 수 있습니다.</p>
+<p>다음은 메모리 거짓공유를 실험하기 위한 프로그램인 void cacheline2()입니다.</p>
+<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">int arr1[100];
+int arr2[100];
+
+void cacheline2() {
+Time stime, etime;
+gettimeofday(&amp;stime, NULL);
+pthread_t t1;
+pthread_t t2;
+pthread_create(&amp;t1, NULL, function1,  NULL);
+pthread_create(&amp;t2, NULL, function2, NULL);
+pthread_join(t1, NULL);
+pthread_join(t2, NULL);
+gettimeofday(&amp;etime, NULL);
+printgap(stime, etime);
+
+    gettimeofday(&amp;stime, NULL);
+    function1(NULL);
+    function2(NULL);
+    gettimeofday(&amp;etime, NULL);
+    printgap(stime, etime);
+}
+
+void* function1(void * arg) {
+for (size_t i = 0; i &lt; 0xfffffff; i++)
+arr1[99] = 10;
+}
+
+void* function2(void * arg) {
+for (size_t i = 0; i &lt; 0xfffffff; i++)
+arr2[0] = 99;
+}</code></pre></div>
+<p>arr1과 arr2를 전역으로 연이어 선언하였네요. Arr1과 arr2는 인접한 공간에 위치하게 되기 때문에, 캐시라인의 크기를 64바이트로 가정했을 때 function	1과 function에서 사용하는 arr1[99]와 arr2[0]는 다른 배열이지만 캐시라인에 같이 올라가게 됩니다. 그런데 두 쓰레드에서 같은 캐시라인에 있는 데이터를 참조하고 있네요. Pthread API를 사용하여 두개의 쓰레드로 각각의 함수를 실행한 결과와 싱글 쓰레드에서 순차적으로 실행한 결과에 대해서 모두 수행시간을 측정해보았습니다. 과연 결과는 어떨까요?</p>
+<p>우선 인텔 CPU에서, 복수의 동시실행 태스크가 이렇게 동일한 캐시라인에 배치된 데이터을 새롭게 쓰게 된다면 거짓 공유가 발생합니다. 하나의 태스크가 어떤 변수에 쓰기 동작을 시행하면 양쪽 태스크에 캐시라인이 같이 무효화되버리는 현상을 말합니다. 이렇게 캐시라인이 무효화될 때마다 재로딩되므로, 수행시간이 증가할 가능성이 높아집니다. 이를 해결하려면 저희가 수업시간에 배운 <strong>attribute</strong> 예약어로 메모리 정렬을 사용해 서로 다른 캐시라인에 배치해야 합니다.
+그럼 과연 예상과 마찬가지로 거짓공유가 일어나 성능이 저하될지, 싱글 쓰레드와 성능차이가 어떤지 확인해보겠습니다.</p>
+<p>이런, 전혀 반대의 결과를 내고 말았네요. 멀티 쓰레드가 메모리 거짓 공유 현상 없이 캐시라인을 그대로 잘 활용하여 수행시간이 단축된 결과가 나왔습니다. 사실 m1칩은 그 작동 기전에 대한 부분이 자료가 많이 없어 명확히 어떤 방법으로 캐시가 동작하는지 확인하기 어려운 부분이 있습니다. 하지만 우선 m1 칩에서는 L1/ L2 캐시 모드 캐시의 크기가 모두 인텔 cpu에 비해 증가하였습니다. 명령어/데이터가 각각 32kb였던 인텔 CPU에 비해 M1 칩은 각각 192kb/128kb의 크기를 가집니다(명령어/데이터 순서) 이러한 비교적 큰 캐시사이즈로 인해 쓰레드가 독립적인 캐시라인을 가질 가능성(메모리 정렬을 통해)을 생각해볼 수 있습니다.</p>
+<p>결론은 다음과 같습니다. 첫번 째 프로그램인 void parallel()에서는 데이터 의존성이 존재하는 2개의 연산이 있는 루프와, 데이터 의존성이 없는 2개의 연산이 있는 루프에 대한 수행시간을 각각 측정했습니다. 결과는 데이터 의존성이 존재하는 경우 명령어의 superscalar 시행이 불가능하다는 것과, 이에 따라 수행시간이 훨씬 길어진 다는 것이었습니다.
+두번 째로는, void cacheline()에서 캐시라인의 크기보다 작은 4바이트 부터(int배열) 캐시라인의 크기인 128바이트보다 훨씬 큰 크기까지 루프를 건너뛰는 크기를 변경해가면서 속도를 측정하였습니다. 결과는 인텔 cpu에서 예상됐던 것과는 달리, m1 환경에서는 캐시라인 크기보다 작은 경우에도 실제 연산횟수와 반비례하여 수행시간이 감소하였고, 이에 따라 m1에서 캐시에 데이터를 fetch하는 횟수가 캐시라인과 상관없이 동일하거나, 혹은 캐시에 데이터를 fetch하는 속도 자체가 cpu 연산속도와 비교했을 때 별로 차이가 없을 수 있다는 추측을 해보았습니다.
+마지막으로는, void cacheline2()라는 프로그램의 수행시간 측정을 통해 동일한 캐시라인에 올라간 데이터가 복수의 태스크에서 접근될 때 일어나는 메모리 거짓공유 현상과, 그에 따른 캐시라인 무효화 및 성능의 저하를 알아보고자 했습니다. 캐시라인 무효화란 복수의 태스크가 공유하고 있는 동일한 캐시라인에 대해 쓰기 연산이 발생했을 시, 캐시 데이터를 다시 fetch하는 현상을 말합니다. 저의 m1 시스템 환경에서는 캐시라인이 128바이트로 인텔 cpu에 2배로 더 큽니다. 캐시라인이 더 큰 경우, 보통 메모리 거짓공유의 위험성이 더 크다고 평가합니다. 하지만 실제 실험결과,  캐시 거짓공유 현상이 2개의 쓰레드로 작업 수행 시에 일어나지 않았고, 이에 따라 서로 다른 쓰레드는 서로 독립적인 캐시라인을 사용하거나, 혹은 자체적으로 캐시에서 메모리를 정렬하여 2개의 캐시라인을 쓸 가능성에 대해 추측해보았습니다.</p></div><style data-emotion="css hx9xpc">@media (max-width: 768px){.css-hx9xpc{padding:0 20px;}}</style><div class="css-hx9xpc e1gqsjds0"></div><style data-emotion="css 9w9jmx">.css-9w9jmx{display:grid;place-items:center;margin-top:auto;padding:50px 0;font-size:15px;text-align:center;line-height:1.5;}@media (max-width: 768px){.css-9w9jmx{font-size:13px;}}</style><footer class="css-9w9jmx e1oae0v80">Thank you for Visiting My Blog, Have a Good Day😊<br/>© 2021 Developer Inu, Powered by Gatsby</footer></main></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/m1 mac에서 프로그램 수행시간 측정 실험/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-635a9dfd597478a1f0fa.js"],"app":["/app-9ae18457cda424c84e6b.js"],"component---src-pages-404-tsx":["/component---src-pages-404-tsx-c2765bf0382ddfe99848.js"],"component---src-pages-index-tsx":["/component---src-pages-index-tsx-6da64ac7e5e518eeab86.js"],"component---src-pages-info-tsx":["/component---src-pages-info-tsx-83964be20d5d60f0efe8.js"],"component---src-templates-post-template-tsx":["/component---src-templates-post-template-tsx-4e8a3edb581fd52dc7f8.js"]};/*]]>*/</script><script src="/polyfill-635a9dfd597478a1f0fa.js" nomodule=""></script><script src="/component---src-templates-post-template-tsx-4e8a3edb581fd52dc7f8.js" async=""></script><script src="/d0dcf9c1039535d44ee74defc829dfbf62dac3c5-7039da108a9f6100171e.js" async=""></script><script src="/cb1608f2-3d1f96b69f7c4498694b.js" async=""></script><script src="/app-9ae18457cda424c84e6b.js" async=""></script><script src="/framework-a71258511df4b73cc72c.js" async=""></script><script src="/webpack-runtime-7f689120d7874556cb17.js" async=""></script></body></html>
