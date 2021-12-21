@@ -43,6 +43,7 @@ const IndexPage: FunctionComponent<IndexProp> = function ({
       publicURL,
     },
   } = data
+
   const parsed: URLSearchParams = new URLSearchParams(search)
   const categoryParam = parsed.get('category')
   const selectedCategory: string =
